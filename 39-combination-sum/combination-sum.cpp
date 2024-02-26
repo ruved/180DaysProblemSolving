@@ -1,6 +1,6 @@
 class Solution {
 public:
-    void  help(vector<int>& candidates, int target,int i,vector<int>temp,vector<vector<int>>&ans)
+    void  help(vector<int>& candidates, int target,int i,vector<int>&temp,vector<vector<int>>&ans)
     {
         if(i<0) return ;
         if(target==0)
