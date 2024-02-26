@@ -1,5 +1,6 @@
 class Solution {
-public:
+public://1 2 3 1
+    // 1 1 2 3
     void  help(vector<int>& candidates, int target,int i,vector<int>&temp,vector<vector<int>>&ans)
     {
         if(i<0) return ;
@@ -19,7 +20,7 @@ public:
         help(candidates,target,i-1,temp,ans);
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        sort(candidates.begin(),candidates.end());
+        // sort(candidates.begin(),candidates.end());
         vector<int>temp;
         vector<vector<int>>ans;
          help(candidates,target,candidates.size()-1,temp,ans);
