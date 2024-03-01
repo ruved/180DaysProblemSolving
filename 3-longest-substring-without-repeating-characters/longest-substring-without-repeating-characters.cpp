@@ -9,23 +9,21 @@ public:
         for(int i=0;i<s.length();++i)
         {
             if(unorderd_st.find(s[i])==unorderd_st.end())
-            {
-                unorderd_st.insert(s[i]);
+            { 
                 end=i;
             }
             else
             {
-                // cout<<end<<" "<<start<<" "<<i<<"::";
-               
-                 ans=max(ans,end-start+1);
+                ans=max(ans,end-start+1);
                 while(unorderd_st.find(s[i])!=unorderd_st.end())
                 {
                     unorderd_st.erase(s[j]);
                     j++;
                 }
-                unorderd_st.insert(s[i]);
+                
                 start=j;
             }
+            unorderd_st.insert(s[i]);
         }
         ans=max(ans,end-start+1);
         return ans;
