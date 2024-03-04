@@ -11,6 +11,7 @@ public:
                 count++;
                 power-=tokens[i];
                 i++;
+                 score=max(score,count);
             }
             else if(power<tokens[i])
             {
@@ -23,7 +24,7 @@ public:
                 else
                    break;
             }
-            score=max(score,count);
+           
         }
         return score;
     }
