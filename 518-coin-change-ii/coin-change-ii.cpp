@@ -18,8 +18,7 @@ public:
     int change(int amount, vector<int>& coins) {
         vector<vector<int>>dp(coins.size(),vector<int>(amount+1,-1));
         int ans=help(coins,coins.size()-1,amount,dp);
-        if(ans==INT_MAX)
-            return 0;
+        
         return ans;
     }
 };
