@@ -13,27 +13,31 @@ public:
     ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
        
        ListNode *cur=list1;
-       ListNode *remove,*tail;
+       ListNode *cur2=list2;
+       ListNode *remove;
         int len=1;
-        if(a>0){
-            while(len<a)
-            {
-                cur=cur->next;
-                len++;
-            }
+       
+        while(len<a)
+        {
+            cur=cur->next;
+            len++;
+        }
+         if(a>0)
+         {
             remove=cur->next;
             cur->next=list2;
-        }
-     
+         }
+           
         while(len<=b)
         {
-                remove=remove->next;
-                len++;
+            remove=remove->next;
+            len++; 
         }
-        ListNode *cur2=list2;
+        
         while(cur2->next)
             cur2=cur2->next;
-            cur2->next=remove;
+
+        cur2->next=remove;
         return a==0?list2:list1;
     }
 };
