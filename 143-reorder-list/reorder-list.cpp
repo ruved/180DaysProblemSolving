@@ -36,9 +36,9 @@ public:
         // cout<<"::"<<sl->val<<" ";
         for(int i=0;i<n;++i)
         {
-            ListNode *temp=sl->next;//3->4
+            ListNode *temp=sl->next;
             if(st.top()!=temp&&st.top()!=sl){
-              sl->next=st.top();
+                sl->next=st.top();
                 st.top()->next=temp; 
             }
             else
@@ -47,5 +47,5 @@ public:
             sl=temp;
         }
     }
-    // 1-5->2->4->3
+    // 1-4->2->3
 };
