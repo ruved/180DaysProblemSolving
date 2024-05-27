@@ -1,24 +1,13 @@
 class Solution {
 public:
-    int help(vector<int>& coins,int i, int amount,vector<vector<int>>&dp)
-    {
-        if(i<0) return 0;
-        if(amount==0)
-            return 1;
-        if(dp[i][amount]!=-1) return dp[i][amount];
-        int take=0;
-        int dont=0;
-        if(amount>=coins[i]){
-            take=help(coins,i,amount-coins[i],dp);
-        }
-        dont=help(coins,i-1,amount,dp);
-        return dp[i][amount]=take+dont;
-        
-    }
+int help(int amount, vector<int>& coins,int i,vector<vector<int>>&dp){
+    if(amount==0) return 1;
+    if(i<0||amount<0) return 0;
+    if(dp[amount][i]!=-1) return dp[amount][i];
+    return  dp[amount][i]=help(amount-coins[i],coins,i,dp)+help(amount,coins,i-1,dp);
+}
     int change(int amount, vector<int>& coins) {
-        vector<vector<int>>dp(coins.size(),vector<int>(amount+1,-1));
-        int ans=help(coins,coins.size()-1,amount,dp);
-        
-        return ans;
+        vector<vector<int>>dp(amount+1,vector<int>(coins.size()+1,-1));
+        return help(amount,coins,coins.size()-1,dp);
     }
 };
