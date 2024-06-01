@@ -5,15 +5,12 @@ public:
         int mx=0;
         while(i<j)
         {
+            mx=max(mx,min(height[i],height[j])*(j-i));
             if(height[i]<=height[j])
-            {
-                mx=max(mx,min(height[i],height[j])*(j-i));
                 i++;
-            }
-            else{
-                mx=max(mx,min(height[i],height[j])*(j-i));
+            else  
                 j--;
-            }
+            
         }
         return mx;
     }
