@@ -37,7 +37,7 @@ TreeNode* inorder(TreeNode* root,vector<TreeNode*>&ans,int target,bool &found){
                     if(temp!=ans[j]){
                         ans.erase(ans.begin()+j);
                     }
-
+                    break;
                 }
             }
         }
