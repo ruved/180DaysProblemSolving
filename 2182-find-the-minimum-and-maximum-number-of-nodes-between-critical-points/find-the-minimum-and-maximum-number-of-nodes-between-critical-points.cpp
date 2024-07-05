@@ -32,13 +32,8 @@ public:
             count++;
         }
         if(ans.size()<2) return {-1,-1};
-        // sort(ans.begin(),ans.end());
         int maxdis=ans[ans.size()-1]-ans[0];
-        
-        // for(int i=1;i<ans.size();++i)
-        // {
-           
-        // }
+
         return {mindis,maxdis};
     }
 };
