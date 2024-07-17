@@ -1,46 +1,46 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+
 class Solution {
 public:
-TreeNode* inorder(TreeNode* root,vector<TreeNode*>&ans,int target,bool &found){
-    if(!root) return root;
-    if(root->val==target){
-        found=true;
-        if(root->left)
-        ans.push_back(root->left);
-        if(root->right)
-        ans.push_back(root->right);
-        return NULL;        
-    }else{
-        root->left=inorder(root->left,ans,target,found);
-        root->right=inorder(root->right,ans,target,found);
-        return root;
-    }
-}
     vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
-        vector<TreeNode*>ans;
-        ans.push_back(root);
-        for(int i=0;i<to_delete.size();++i){
-            bool found=false;
-            for(int j=0;j<ans.size();++j){
-                TreeNode* temp=inorder(ans[j],ans,to_delete[i],found);
-                if(found){
-                    if(temp!=ans[j]){
-                        ans.erase(ans.begin()+j);
+        unordered_map<int, TreeNode*> res;
+        unordered_set<int> to_delete_set(to_delete.begin(), to_delete.end());
+        res[root->val] = root;
+
+        function<void(TreeNode*, TreeNode*, bool)> recursion = [&](TreeNode* parent, TreeNode* cur_node, bool isleft) {
+            if (cur_node == nullptr) return;
+
+            recursion(cur_node, cur_node->left, true);
+            recursion(cur_node, cur_node->right, false);
+
+            if (to_delete_set.find(cur_node->val) != to_delete_set.end()) {
+                if (res.find(cur_node->val) != res.end()) {
+                    res.erase(cur_node->val);
+                }
+
+                if (parent) {
+                    if (isleft) {
+                        parent->left = nullptr;
+                    } else {
+                        parent->right = nullptr;
                     }
-                    break;
+                }
+
+                if (cur_node->left) {
+                    res[cur_node->left->val] = cur_node->left;
+                }
+                if (cur_node->right) {
+                    res[cur_node->right->val] = cur_node->right;
                 }
             }
+        };
+
+        recursion(nullptr, root, false);
+        
+        vector<TreeNode*> result;
+        for (auto& pair : res) {
+            result.push_back(pair.second);
         }
-        return ans;
+        
+        return result;
     }
 };
