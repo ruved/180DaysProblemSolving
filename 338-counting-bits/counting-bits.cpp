@@ -1,19 +1,26 @@
 class Solution {
 public:
     vector<int> countBits(int n) {
-         vector<int> t(n+1);
-        
-        // t[0] will be 0 beacuse 0 has count of set bit is 0;
-        t[0] = 0;
-        
-        // we can compute current set bit count using previous count
-        // as x/2 in O(1) time
-        
-        // i%2 will be 0 for even number ans 1 for odd number
-        
-        for(int i = 1; i<=n; ++i)
-            t[i] = t[i/2] + i%2;
-        
-        return t;
+      
+        vector<int>dp(n+1);
+       dp[0]=0;
+       if(n==0) return dp;
+       dp[1]=1;
+       if(n==1) return dp;
+        int count=1;
+        int i=2;
+        while(i<=n){
+            dp[i]=1;
+            if(i==n) break;
+            int st=pow(2,count);
+            int en=pow(2,count+1);
+            while(i<=n&&i<en){
+                dp[i]=dp[st]+dp[i-st];
+                i++;
+            }
+            
+            count++;
+        }
+        return dp;
     }
 };
