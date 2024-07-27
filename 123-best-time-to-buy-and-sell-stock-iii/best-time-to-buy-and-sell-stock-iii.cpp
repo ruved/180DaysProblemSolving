@@ -1,23 +1,24 @@
 class Solution {
 public:
-int help(vector<int>&prices,int k,int i,bool canbuy,vector<vector<vector<int>>>&mp){
-    
-	if(i>=prices.size()||k<=0) return 0;
-	int profitA=0,profitB=0,profitC=0;
-	
-	if(mp[i][k][canbuy]!=-1) return mp[i][k][canbuy];
-	
-	if(canbuy)
-        profitC=-prices[i]+help(prices,k,i+1,!canbuy,mp);
+int help(vector<int>& prices,int i,bool buy,int k,vector<vector<vector<int>>>&dp){
+    if(i==prices.size()||k==0) return 0;
+
+    if(dp[i][k][buy]!=-1) return dp[i][k][buy];
+    int take=0,notake=0;
+    if(buy)
+        take = -prices[i]+help(prices,i+1,false,k,dp);
     else
-        profitA=prices[i]+help(prices,k-1,i+1,!canbuy,mp);
+        take = prices[i]+help(prices,i+1,true,k-1,dp);
+
+    notake=help(prices,i+1,buy,k,dp);
+    return dp[i][k][buy]=max(take,notake);
     
-	profitB=help(prices,k,i+1,canbuy,mp);
-	return mp[i][k][canbuy]=max(profitC,max(profitA,profitB));
 }
     int maxProfit(vector<int>& prices) {
-        int k=2;
-        vector<vector<vector<int>>>mp(prices.size(),vector<vector<int>>(k+1,vector<int>(2,-1)));
-	return help(prices,k,0,true,mp);
+         int n=prices.size();
+         int k=2;
+        vector<vector<vector<int>>>dp(n,vector<vector<int>>(3,vector<int>(2,-1)));
+        int ans= help(prices,0,true,k,dp);
+        return ans<0?0:ans;
     }
 };
