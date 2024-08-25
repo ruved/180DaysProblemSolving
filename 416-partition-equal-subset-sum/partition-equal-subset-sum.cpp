@@ -1,24 +1,24 @@
 class Solution {
 public:
-bool help(vector<int>& nums,int i,int sum,vector<vector<int>>&dp){
-    if(sum==0) return 1;
-    if(i<0) return 0;
+int help(vector<int>& nums,int i,int sum,vector<vector<int>>&dp){
+    if(sum==0) return true;
+    if(i<0) return false;
     if(dp[i][sum]!=-1) return dp[i][sum];
-    bool take=0,notake=0;
-
-    if(sum>=nums[i])
+    int take=false,notake=false;
+    if(sum>=nums[i]) 
         take=help(nums,i-1,sum-nums[i],dp);
     notake=help(nums,i-1,sum,dp);
-    return dp[i][sum]=max(take,notake);
-
-
+    dp[i][sum]=take||notake;
+    return dp[i][sum];
 }
     bool canPartition(vector<int>& nums) {
-        int ans=0;
-        for(int i=0;i<nums.size();++i)
-            ans+=nums[i];
-        vector<vector<int>>dp(nums.size(),vector<int>(ans+1,-1));
-        if(ans%2!=0) return false;
-        return help(nums,nums.size()-1,ans/2,dp);
+        int sum=0;
+        for(int i=0;i<nums.size();++i) sum+=nums[i];
+        int n=nums.size();
+        if(sum%2==1) return false;
+        vector<vector<int>>dp(n,vector<int>(sum/2+1,-1));
+       if (help(nums,n-1,sum/2,dp)==1)
+        return true;
+       return false;
     }
 };
