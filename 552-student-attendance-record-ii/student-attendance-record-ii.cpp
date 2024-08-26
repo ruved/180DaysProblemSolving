@@ -1,20 +1,22 @@
 class Solution {
 public:
 int mod=1e9+7;
-int help(int i,int consec,bool A,vector<vector<vector<int>>>&dp){
-    
-    if(i==0) return 1;
-    if(dp[i][consec][A]!=-1) return dp[i][consec][A];
-    long long takeA=0,takeB=0,takeC=0;
-    if(!A)
-    takeA=help(i-1,2,true,dp);
-    if(consec>0)
-        takeB=help(i-1,consec-1,A,dp);
-    takeC=help(i-1,2,A,dp);
-    return dp[i][consec][A]=(takeA+takeB+takeC)%mod;
+int help(int n,bool Absent,int late,vector<vector<vector<int>>>&dp){
+    if(n<0) return 0;
+    if(n==0) return 1;
+    if(dp[n][late][Absent]!=-1) return dp[n][late][Absent];
+
+    long long a=0,b=0,c=0;
+    if(!Absent){
+        a=help(n-1,true,2,dp);
+    }
+    if(late>0)
+        b=help(n-1,Absent,0,dp)+help(n-2,Absent,0,dp);
+    c=help(n-1,Absent,2,dp);
+    return dp[n][late][Absent]=(a+b+c)%mod;
 }
     int checkRecord(int n) {
-    vector<vector<vector<int>>>dp(n+1,vector<vector<int>>(3,vector<int>(2,-1)));
-       return help(n,2,false,dp);
+        vector<vector<vector<int>>>dp(n+1,vector<vector<int>>(3,vector<int>(2,-1)));
+        return help(n,false,2,dp)%mod;
     }
 };
