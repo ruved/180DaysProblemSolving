@@ -1,7 +1,7 @@
 class Solution {
 public:
 int help(int n,vector<int>&dp){ 
-    if(n<1) return 1;
+    if(n<=1) return 1;
     
     if(dp[n]!=-1) return dp[n];
     int ans=1;
