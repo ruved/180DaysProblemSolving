@@ -4,21 +4,16 @@ int dp[1001];
     int dp1[1001];
     int M = 1e9 + 7;
     long long int triminoSolve(int n) {
-        
-        if(n == 1) {
+        if(n == 1) 
             return 1;
-        }
-
-
-        if(n <= 0) {
-            return 0;
-        }
-
-        if(dp1[n] == -1) {
-            return dp1[n] = (triminoSolve(n-1) + dominoSolve(n-1))%M;
-        }
         
-        return dp1[n];
+        if(n <= 0) 
+            return 0;
+        if(dp1[n] == -1) 
+            return dp1[n] = (triminoSolve(n-1) + dominoSolve(n-1))%M;
+        
+            
+            return dp1[n];
     }
 
     long long int dominoSolve(int n) {
