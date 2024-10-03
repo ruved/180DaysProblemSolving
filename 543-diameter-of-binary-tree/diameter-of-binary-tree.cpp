@@ -11,19 +11,16 @@
  */
 class Solution {
 public:
-    int height(TreeNode* root)
-    {
+    int help(TreeNode* root,int &sum){
         if(!root) return 0;
-       int lh=height(root->left);
-        int rh=height(root->right);
-        return 1+max(lh,rh);
+        int left=help(root->left,sum);
+        int right=help(root->right,sum);
+        sum=max(sum,1+left+right);
+        return 1+max(left,right);
     }
     int diameterOfBinaryTree(TreeNode* root) {
-        
-        if(!root) return 0;
-        int lh=height(root->left);
-        int rh=height(root->right);
-        cout<<root->val<<" "<<lh<<" "<<rh<<"::";
-        return max(lh+rh,max(diameterOfBinaryTree(root->left),diameterOfBinaryTree(root->right)));
+        int sum=0;
+        help(root,sum);
+        return sum-1;
     }
 };
