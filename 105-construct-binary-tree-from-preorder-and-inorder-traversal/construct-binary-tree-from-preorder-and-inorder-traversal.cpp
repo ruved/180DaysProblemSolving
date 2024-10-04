@@ -13,7 +13,7 @@ class Solution {
 public:
 TreeNode* help(vector<int>& preorder,unordered_map<int,int>&mp ,int &i,int mn,int mx){
     if(mn>mx) return NULL;
-    if(i==preorder.size()) return NULL;
+    // if(i==preorder.size()) return NULL;
     int pos=mp[preorder[i]];
     TreeNode* root=new TreeNode(preorder[i]);
 
