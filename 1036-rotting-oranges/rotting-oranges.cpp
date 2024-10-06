@@ -1,58 +1,38 @@
 class Solution {
 public:
+bool check(int i,int j,int n,int m){
+    if(i<0||j<0||i>=n||j>=m) return false;
+    return true;
+}
     int orangesRotting(vector<vector<int>>& grid) {
-        int m=grid.size();
-        int n=grid[0].size();
         queue<pair<int,int>>q;
-        vector<vector<bool>>vis(m,vector<bool>(n,false));
-        for(int i=0;i<m;++i){
-        for(int j=0;j<n;++j)
-            if(grid[i][j]==2)
-            {
-                vis[i][j]=true;
-                q.push(make_pair(i,j));
+        int n=grid.size();
+        int m=grid[0].size();
+        vector<vector<bool>>vis(n,vector<bool>(m,false));
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(grid[i][j]==2) q.push({i,j});
+        int ans=0;
+        while(!q.empty()){
+            int s=q.size();
+            for(int k=0;k<s;++k){
+                int i= q.front().first;
+                int j=q.front().second;
+                q.pop();
+                if(check(i+1,j,n,m)&&grid[i+1][j]==1) {
+                    grid[i+1][j]=2;q.push({i+1,j});}
+                if(check(i-1,j,n,m)&&grid[i-1][j]==1) {
+                    grid[i-1][j]=2;q.push({i-1,j});}
+                if(check(i,j+1,n,m)&&grid[i][j+1]==1) {
+                    grid[i][j+1]=2;q.push({i,j+1});}
+                if(check(i,j-1,n,m)&&grid[i][j-1]==1) {
+                    grid[i][j-1]=2;q.push({i,j-1});}
             }
+            ans++;
         }
-        int minute=-1;
-        while(!q.empty())
-        {
-            int qsz=q.size();
-              for(int i=0;i<qsz;++i)
-              {
-                  pair<int,int>p=q.front();
-                  // cout<<p.first<<" "<<p.second<<"--";
-                  q.pop();
-                  if(((p.first+1)<m)&&(!vis[p.first+1][p.second])&&grid[p.first+1][p.second]==1)
-                  {
-                      vis[p.first+1][p.second]=true;
-                      q.push({p.first+1,p.second});
-                  }
-                  if(((p.second+1)<n)&&(!vis[p.first][p.second+1])&&grid[p.first][p.second+1]==1)
-                    {
-                        vis[p.first][p.second+1]=true;
-                        q.push({p.first,p.second+1});
-                    }
-                  if(((p.first-1)>=0)&&(!vis[p.first-1][p.second])&&grid[p.first-1][p.second]==1)
-                    {
-                        vis[p.first-1][p.second]=true;
-                        q.push({p.first-1,p.second});
-                    }
-                  if(((p.second-1)>=0)&&(!vis[p.first][p.second-1])&&grid[p.first][p.second-1]==1)
-                    {
-                        vis[p.first][p.second-1]=true;
-                        q.push({p.first,p.second-1});
-                    }
-              }
-            minute++;
-        }
-        
-        for(int i=0;i<m;++i){
-        for(int j=0;j<n;++j)
-            if(grid[i][j]==1&&!vis[i][j])
-            {
-               return -1;
-            }
-        }
-        return minute==-1?0:minute;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(grid[i][j]==1) return -1;
+        return ans==0?ans:ans-1;
     }
 };
