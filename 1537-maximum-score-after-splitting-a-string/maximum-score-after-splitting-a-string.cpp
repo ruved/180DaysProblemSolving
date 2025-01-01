@@ -9,16 +9,15 @@ public:
         if(s[0]=='0')
             zero++;
         else ones--;
-        int ans=0;
+        
+        int ans=max(0,zero+ones);;
         for(int i=1;i<n-1;++i){
-            ans=max(ans,zero+ones);
             if(s[i]=='1')
                 ones--;
             else 
                 zero++;
-            
+            ans=max(ans,zero+ones);
         }
-       ans=max(ans,zero+ones);
         return ans;
     }
 };
