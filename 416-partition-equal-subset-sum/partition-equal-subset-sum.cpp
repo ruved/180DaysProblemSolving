@@ -5,7 +5,7 @@ bool help(vector<int>& nums,int i,int sum,vector<vector<int>>&dp){
     if(i<0) return false;
 
     if(dp[i][sum]!=-1) return dp[i][sum];
-    
+
     bool take=false;
     if(nums[i]<=sum)    
         take=help(nums,i-1,sum-nums[i],dp);
@@ -19,6 +19,7 @@ bool help(vector<int>& nums,int i,int sum,vector<vector<int>>&dp){
         
         for(int i=0;i<nums.size();++i) sum+=nums[i];
         if(sum%2==1) return false;
+
         vector<vector<int>>dp(n,vector<int>(sum/2+1,-1));
         return help(nums,nums.size()-1,sum/2,dp);
     }
