@@ -1,21 +1,21 @@
 class Solution {
 public:
-int help(vector<int>& prices, int &fee,int i,bool buy,vector<vector<int>>&dp){
+int help(vector<int>& prices,bool buy,int i,vector<vector<int>>&dp,int &fee){
     if(i>=prices.size()) return 0;
-    if(dp[i][buy]!=-1) return dp[i][buy];
-    int ans=0;
-    if(buy){
-        ans=-prices[i]-fee+help(prices,fee,i+1,false,dp);
-    }
-    else{
-        ans=prices[i]+help(prices,fee,i+1,true,dp);
-    }
-    int ans2=help(prices,fee,i+1,buy,dp);
-    return dp[i][buy]=max(ans,ans2);
+
+    if(dp[buy][i]!=-1) return dp[buy][i];
+    int take=0,notake=0;
+    if(buy==true)
+        take=-prices[i]+help(prices,false,i+1,dp,fee);
+    else
+        take=(prices[i]-fee)+help(prices,true,i+1,dp,fee);
+    notake=help(prices,buy,i+1,dp,fee);
+    return dp[buy][i]=max(take,notake);
 }
     int maxProfit(vector<int>& prices, int fee) {
+        int buy=-1;
         int n=prices.size();
-        vector<vector<int>>dp(n,vector<int>(2,-1));
-        return help(prices,fee,0,true,dp);
+        vector<vector<int>>dp(2,vector<int>(n,-1));
+        return help(prices,buy,0,dp,fee);
     }
 };
