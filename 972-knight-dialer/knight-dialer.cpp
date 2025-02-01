@@ -9,10 +9,8 @@ int help(int n,int i,vector<vector<int>>&dp){
     if(dp[n][i]!=-1) return dp[n][i];
     long long int ans=0;
     for(int num:cord[i]){
-        if(num!=5) {
-            int temp=help(n-1,num,dp);
-            ans=(ans%mod+temp%mod)%mod;
-        }
+        int temp=help(n-1,num,dp);
+        ans=(ans%mod+temp%mod)%mod;
     }
     return dp[n][i]=ans;
 }
