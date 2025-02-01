@@ -5,12 +5,14 @@ vector<vector<int>>cord={{4,6},{6,8},{7,9},{4,8},{0,3,9},{},{0,1,7},{2,6},
 long long mod=1e9+7;
 int help(int n,int i,vector<vector<int>>&dp){
     if(n==1) return 1;
-    if(i==5) return 0;
+    
     if(dp[n][i]!=-1) return dp[n][i];
     long long int ans=0;
     for(int num:cord[i]){
-        int temp=help(n-1,num,dp);
-        ans=(ans%mod+temp%mod)%mod;
+        if(num!=5) {
+            int temp=help(n-1,num,dp);
+            ans=(ans%mod+temp%mod)%mod;
+        }
     }
     return dp[n][i]=ans;
 }
