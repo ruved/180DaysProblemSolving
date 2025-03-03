@@ -1,31 +1,19 @@
 class Solution {
 public:
-    int n;
-    int dp[2][1005] ; 
-   
-    int helper(int idx , vector<int>& nums , int sign){
-        if(dp[sign][idx] != -1 )    return dp[sign][idx] ; 
-        int ans = 1 ; 
-        for(int i=idx+1 ; i<n;i++){
-            if(sign==1){
-                if(nums[i]-nums[idx] > 0){
-                    ans = max(ans,1+helper(i , nums , 0)) ; 
-                }   
-            }
-            else{
-                if(nums[i]-nums[idx] < 0){
-                    ans = max(ans  ,1+helper(i , nums , 1)) ;
-                }   
-            }
-        }
-        return dp[sign][idx] =ans ; 
+int help(vector<int>& nums,int i,bool pos,vector<vector<int>>&dp){
+    if(i<0) return 0;
+    if(dp[i][pos]!=-1) return dp[i][pos];
+    int notake=help(nums,i-1,pos,dp);
+    int take=1;
+    for(int j=i-1;j>=0;--j){
+        if((pos&&nums[i]-nums[j]>0)||(!pos&&nums[i]-nums[j]<0))
+            take=max(take,1+help(nums,j,!pos,dp));
     }
+    return dp[i][pos]=max(take,notake);
+}
     int wiggleMaxLength(vector<int>& nums) {
-        n = nums.size()  ;
-        memset(dp , -1 , sizeof(dp)) ;
-        int ans = helper(0 , nums , 1) ;   
-        ans = max(ans , helper(0,nums , 0)) ; 
-        
-        return ans ; 
+        int n=nums.size();
+        vector<vector<int>>dp(n,vector<int>(2,-1));
+        return max(help(nums,n-1,true,dp),help(nums,n-1,false,dp));
     }
 };
