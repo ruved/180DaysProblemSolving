@@ -1,7 +1,7 @@
 class Solution {
 public:
-bool pal(string &s){
-    int i=0,j=s.length()-1;
+bool pal(string &s,int i,int j){
+    // int i=0,j=s.length()-1;
     while(i<j){
         if(s[i]!=s[j]) return false;
         i++,j--;
@@ -14,8 +14,7 @@ int help(string &s,int i,vector<int>&dp){
     string sub="";
     int ans=INT_MAX;
     for(int j=i;j>=0;--j){
-        sub.push_back(s[j]);
-        if(pal(sub)){
+        if(pal(s,j,i)){
             ans=min(ans,1+help(s,j-1,dp));
         }
     }
