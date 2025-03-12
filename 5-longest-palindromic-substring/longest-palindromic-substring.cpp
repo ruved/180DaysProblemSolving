@@ -1,33 +1,33 @@
 class Solution {
 public:
-    bool chcekpal(string &s,int i,int j)
-    {
-        while(i<j)
-        {
-            if(s[i]!=s[j])
-                return false;
-            i++;
-            j--;
+  
+    std::string longestPalindrome(std::string s) {
+        if (s.length() <= 1) {
+            return s;
         }
-        return true;
-    }
-    string longestPalindrome(string s) {
-        int palindromeLength=0;
-        int strt=0,end=0;
-        for(int i=0;i<s.length();++i)
-        {
-             for(int j=i+1;j<s.length();++j)
-             {
-                 if(chcekpal(s,i,j)&&(palindromeLength<(j-i+1)))
-                 {
-                     palindromeLength=j-i+1;
-                     strt=i;
-                     end=j;
-                 }
-             }
+
+        auto expand_from_center = [&](int left, int right) {
+            while (left >= 0 && right < s.length() && s[left] == s[right]) {
+                left--;
+                right++;
+            }
+            return s.substr(left + 1, right - left - 1);
+        };
+
+        std::string max_str = s.substr(0, 1);
+
+        for (int i = 0; i < s.length() - 1; i++) {
+            std::string odd = expand_from_center(i, i);
+            std::string even = expand_from_center(i, i + 1);
+
+            if (odd.length() > max_str.length()) {
+                max_str = odd;
+            }
+            if (even.length() > max_str.length()) {
+                max_str = even;
+            }
         }
-       
-        return s.substr(strt,end-strt+1);
-        
+
+        return max_str;
     }
 };
