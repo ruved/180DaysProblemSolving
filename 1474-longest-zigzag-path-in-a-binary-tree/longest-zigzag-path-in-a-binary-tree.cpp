@@ -11,27 +11,26 @@
  */
 class Solution {
 public:
-int help(TreeNode* root,int isRight,map<pair<TreeNode*,int>,int>&mp){
+int help(TreeNode* root,int parent,map<pair<TreeNode*,int>,int>&mp){
     if(!root) return 0;
-    if(mp.find({root,isRight})!=mp.end()) return mp[{root,isRight}];
-    int notake=0;
-    int take=0;
-    if(isRight==-1){
-        notake=max(help(root->right,0,mp),help(root->left,1,mp));
-        int mix=max(help(root->right,isRight,mp),help(root->left,isRight,mp));
-        notake=max(notake,mix);
+    if(mp.find({root,parent})!=mp.end()) return mp[{root,parent}];
+    if(parent==-1){
+        int take=max(help(root->left,0,mp),help(root->right,1,mp));
+        int notake=max(help(root->left,-1,mp),help(root->right,-1,mp));
+        return mp[{root,parent}]=max(take,notake);
+    }else{
+        if(parent==0)
+            return mp[{root,parent}]=1+help(root->right,1,mp);
+        else
+            return mp[{root,parent}]=1+help(root->left,0,mp);
     }
-    else{
-        if(isRight==1)
-            take=1+help(root->right,0,mp);
-        else 
-            take=1+help(root->left,1,mp);
-    }
-    return  mp[{root,isRight}]=max(take,notake);
+    
+    
 }
     int longestZigZag(TreeNode* root) {
-        if(!root) return 0;
+      
         map<pair<TreeNode*,int>,int>mp;
         return help(root,-1,mp);
+
     }
 };
