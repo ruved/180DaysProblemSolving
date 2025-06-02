@@ -20,10 +20,8 @@ public:
                 res[p.second]=max(l,r)+1;
             }else if(p.first>left){
                  int l=p.second-1>=0?res[p.second-1]:0;
-                int r=p.second+1<n?res[p.second+1]:0;
-                res[p.second]=l+1;
+                 res[p.second]=l+1;
             }else if(p.first>right){
-                int l=p.second-1>=0?res[p.second-1]:0;
                 int r=p.second+1<n?res[p.second+1]:0;
                 res[p.second]=r+1;
             }
