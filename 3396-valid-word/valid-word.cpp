@@ -8,11 +8,11 @@ public:
         {
             if((word[i]=='@'||word[i]=='#'||word[i]=='$'))
              {
-               return false;  
+               return false; 
              }
-             else if(word[i]-'0'>=0&&word[i]-'0'<=9)
+             else if((word[i]-'0'>=0&&word[i]-'0'<=9))
              {
-                continue;
+                 continue;
              }
              else{
                    char c=tolower(word[i]);
@@ -21,9 +21,8 @@ public:
                    else
                        ccount++;
                }
-              
         }
-         if(vcount&&ccount)
+        if(vcount&&ccount)
                return true;
         return false;  
     }
