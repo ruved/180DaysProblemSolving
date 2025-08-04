@@ -7,14 +7,13 @@ public:
         int temp=0;
         for(int i=0;i<fruits.size();++i){
             mp[fruits[i]]++;
-            temp++;
+           
             while((j<i)&&(mp.size()>2)){
                     mp[fruits[j]]--;
                     if(mp[fruits[j]]==0) mp.erase(fruits[j]);
                     j++;
-                    temp--;
             }
-            mx=max(mx,temp);
+            mx=max(mx,i-j+1);
         }
         return mx;
     }
