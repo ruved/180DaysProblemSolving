@@ -1,33 +1,20 @@
 class Solution {
 public:
-    bool checkSubarraySum(vector<int>& numbers, int divisor) {
-        int currentSum = numbers[0];
-        int length = numbers.size();
-        int index, tempSum;
-        
-        for (int i = 1; i < length; i++) {
-            if (numbers[i] == numbers[i - 1] && numbers[i] == 0) {
-                return true;
-            }
-            
-            currentSum += numbers[i];
-            
-            if (currentSum % divisor == 0) {
-                return true;
-            }
-            
-            index = 0;
-            tempSum = currentSum;
-            
-            while ((i - index) > 1 && tempSum >= divisor) {
-                tempSum -= numbers[index++];
-                
-                if (tempSum % divisor == 0) {
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_map<int,int>mp;
+        mp[0]=-1;
+      
+        int sum=0;
+        for(int i=0;i<nums.size();i++){
+            sum+=nums[i];
+            if(mp.find(sum%k)!=mp.end()){
+                if(i-mp[sum%k]>=2)
                     return true;
-                }
             }
+            else
+                mp[sum%k]=i;
         }
-        
         return false;
+
     }
 };
