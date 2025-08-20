@@ -1,37 +1,55 @@
 class Solution {
 public:
-int mod=1e9+7;
-pair<int,int> help(vector<string>& board,int i,int j,vector<vector<pair<int,int>>>&dp){
-    if(i==0&&j==0) return {0,1};
-    if(i<0||j<0||board[i][j]=='X') return {INT_MIN,0};
-    if(dp[i][j].first!=-1) return dp[i][j];
-    vector<pair<int,int>>vc;
-    vc.push_back(help(board,i-1,j,dp));
-    vc.push_back(help(board,i,j-1,dp));
-    vc.push_back(help(board,i-1,j-1,dp));
-    sort(vc.begin(),vc.end());
-    pair<int,long>ans({vc[2].first,vc[2].second});
-    int k=1;
-    while(k>=0){
-        if(ans.first==vc[k].first){
-            ans.second+=vc[k--].second;
-            ans.second%=mod;
-        }
-        else
-            break;
-    }
-    if(ans.first!=INT_MIN&&board[i][j]!='S')
-        ans.first+=(board[i][j]-'0');
-
-    return dp[i][j]=ans;
-}
+    int mod = 1e9+7;
     vector<int> pathsWithMaxScore(vector<string>& board) {
-        int r=board.size();
-        int c=board[0].size();
-        vector<vector<pair<int,int>>>dp(r,vector<pair<int,int>>(c,{-1,0}));
-         pair<int,int>p=help(board,r-1,c-1,dp);
-         if(p.first!=INT_MIN)
-            return {p.first,p.second};
-         return {0,0};
+        int m = board.size();
+        int n = board[0].size();
+        vector<vector<pair<int,int>>> dp(m, vector<pair<int,int>>(n, {-1,0}));
+        
+        dp[m-1][n-1] = {0,1}; // princess cell
+        
+        // Fill last row
+        for(int j=n-2;j>=0;j--){
+            if(board[m-1][j] != 'X' && dp[m-1][j+1].first != -1){
+                int val = (board[m-1][j]=='E' || board[m-1][j]=='S') ? 0 : board[m-1][j]-'0';
+                dp[m-1][j] = {dp[m-1][j+1].first + val, dp[m-1][j+1].second};
+            } 
+        }
+        
+        // Fill last column
+        for(int i=m-2;i>=0;i--){
+            if(board[i][n-1] != 'X' && dp[i+1][n-1].first != -1){
+                int val = (board[i][n-1]=='E' || board[i][n-1]=='S') ? 0 : board[i][n-1]-'0';
+                dp[i][n-1] = {dp[i+1][n-1].first + val, dp[i+1][n-1].second};
+            }
+        }
+        
+        // Main DP
+        for(int i=m-2;i>=0;i--){
+            for(int j=n-2;j>=0;j--){
+                if(board[i][j] == 'X') continue;
+                
+                int bestscore = -1;
+                bestscore = max(bestscore, dp[i][j+1].first);   // right
+                bestscore = max(bestscore, dp[i+1][j].first);   // down
+                bestscore = max(bestscore, dp[i+1][j+1].first); // diag
+                
+                if(bestscore == -1){ 
+                    dp[i][j] = {-1,0}; // unreachable
+                    continue;
+                }
+                
+                long long ways = 0;
+                if(bestscore == dp[i][j+1].first) ways += dp[i][j+1].second;
+                if(bestscore == dp[i+1][j].first) ways += dp[i+1][j].second;
+                if(bestscore == dp[i+1][j+1].first) ways += dp[i+1][j+1].second;
+                
+                int val = (board[i][j]=='E' || board[i][j]=='S') ? 0 : board[i][j]-'0';
+                dp[i][j] = {bestscore + val, (int)(ways % mod)};
+            }
+        }
+        
+        if(dp[0][0].first == -1) return {0,0};
+        return {dp[0][0].first, dp[0][0].second};
     }
 };
