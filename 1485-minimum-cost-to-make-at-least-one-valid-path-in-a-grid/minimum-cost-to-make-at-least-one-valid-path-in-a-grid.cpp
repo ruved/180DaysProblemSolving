@@ -1,56 +1,36 @@
 class Solution {
 public:
-   int m,n;
-    bool check(int x,int y)
-    {
-        return x>=0 && x<=(m-1)  && y>=0 && y<=(n-1);
-    }
-    int minCost(vector<vector<int>>& a) {
-        
-          this->m=a.size();
-          this->n=a[0].size();
-          vector<vector<int>> dp(m,vector<int>(n,INT_MAX));
-          dp[0][0]=0;
-          set<vector<int>> q;
-          q.insert({0,0,0});
-          vector<int> dir{0,1,0,-1,0};
-          map<pair<int,int>,int> mp;
-          
-          mp[{0,1}]=1;
-          mp[{0,-1}]=2;
-          mp[{1,0}]=3;
-          mp[{-1,0}]=4;
+    int minCost(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        const int INF = 1e9;
+        vector<vector<int>> dist(m, vector<int>(n, INF));
+        using State = pair<int,pair<int,int>>; // {cost, {x,y}}
+        priority_queue<State, vector<State>, greater<State>> pq;
 
-          while(!q.empty())
-          {
-            vector<int> c=*(q.begin());
-            q.erase(q.begin());
-            int x=c[1];
-            int y=c[2];
-            if(x==(m-1) && y==(n-1))
-             return c[0];
-            for(int i=0;i<4;i++)
-            {
-                int nx=x+dir[i];
-                int ny=y+dir[i+1];
-                if(check(nx,ny))
-                {
-                    int len=0;
-                    if(mp[{dir[i],dir[i+1]}]!=a[x][y])
-                     len=1;
-                    if(dp[x][y]+len<dp[nx][ny])
-                    {
-                        q.erase({dp[nx][ny],nx,ny});
-                        dp[nx][ny]=dp[x][y]+len;
-                        q.insert({dp[nx][ny],nx,ny});
-                    }
+        auto inb = [&](int x, int y){ return 0<=x && x<m && 0<=y && y<n; };
+        int dx[4] = {0, 0, 1, -1};
+        int dy[4] = {1,-1, 0,  0};
+        int code[4]= {1, 2, 3,  4};
+
+        dist[0][0] = 0;
+        pq.push({0,{0,0}});
+
+        while(!pq.empty()){
+            auto [d, p] = pq.top(); pq.pop();
+            int x = p.first, y = p.second;
+            if(d != dist[x][y]) continue; // stale
+            if(x==m-1 && y==n-1) return d;
+
+            for(int k=0;k<4;k++){
+                int nx=x+dx[k], ny=y+dy[k];
+                if(!inb(nx,ny)) continue;
+                int w = (grid[x][y]==code[k]) ? 0 : 1;
+                if(dist[nx][ny] > d + w){
+                    dist[nx][ny] = d + w;
+                    pq.push({dist[nx][ny], {nx,ny}});
                 }
             }
-
-            
-          }
-
-          return dp[m-1][n-1];
-
+        }
+        return dist[m-1][n-1];
     }
 };
