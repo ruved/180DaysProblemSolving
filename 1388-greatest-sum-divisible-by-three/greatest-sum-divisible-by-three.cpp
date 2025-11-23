@@ -1,18 +1,45 @@
 class Solution {
 public:
-int help(vector<int>& nums,int i,int sum,vector<vector<int>>&dp){
-        if(i<0){
-            if(sum%3==0) return 0;
-            return INT_MIN;
-        }
-        if(dp[i][sum]!=-1) return dp[i][sum];
-        int take=nums[i]+help(nums,i-1,(sum+nums[i])%3,dp);
-        int notake=help(nums,i-1,sum,dp);
-        return dp[i][sum]=max(take,notake);
-}
     int maxSumDivThree(vector<int>& nums) {
-        int n=nums.size();
-        vector<vector<int>>dp(n,vector<int>(3,-1));
-        return help(nums,n-1,0,dp);
+        int count1=0,count2=0;
+        int sum=0;
+        int minf1=1e5,mins1=1e5,mins2=1e5,minf2=1e5;
+        for(int i=0;i<nums.size();++i){
+             if(nums[i]%3==1){
+                count1++;
+                if(minf1>=nums[i])  {
+                    mins1=minf1;
+                    minf1=nums[i];
+                }else if(mins1>=nums[i]){
+                    mins1=nums[i];
+                }
+            }else if(nums[i]%3==2){
+                count2++;
+                if(minf2>=nums[i])  {
+                    mins2=minf2;
+                    minf2=nums[i];
+                }else if(mins2>=nums[i]){
+                    mins2=nums[i];
+                }
+            }
+            sum+=nums[i];
+        }
+        int d1=minf1+mins1;
+        int d2=minf2+mins2;
+        if(sum%3==0) return sum;
+        else if(sum%3==1){
+            if(count1>=1){
+                return sum-min(minf1,d2);
+            }else{
+                return sum-d2;
+            }
+        }
+        else{
+            if(count2>=1)
+                return sum-min(minf2,d1);
+            else 
+            return sum-d1;
+        }
+
     }
 };
