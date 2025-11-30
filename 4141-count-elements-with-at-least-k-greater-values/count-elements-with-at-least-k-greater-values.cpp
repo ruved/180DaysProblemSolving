@@ -10,7 +10,7 @@ public:
         int ans=0;
         for(auto it=mp.begin();it!=mp.end();++it){
             count+=(it->second);
-            cout<<count<<" ";
+            // cout<<count<<" ";
             if((n-count)>=k) ans+=it->second;
         }
         return ans;
