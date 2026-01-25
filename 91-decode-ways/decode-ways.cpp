@@ -11,7 +11,23 @@ int help(string &s,int i,vector<int>&dp){
    return dp[i]=count;
    }
     int numDecodings(string s) {
-        vector<int>dp(s.length(),-1);
-        return help(s,0,dp);
+        int n=s.length();
+        // vector<int>dp(n+1,0);
+        // return help(s,0,dp);
+        vector<int>dp(3,0);
+        dp[n%3]=1;
+        for(int i=n-1;i>=0;i--){
+            if(s[i]=='0')
+                dp[i%3]=0;
+            else{
+                int  count=0;
+                if(((i+1)<n)&&(s[i]=='1'||(s[i]=='2'&&s[i+1]<='6')))
+                    count+=dp[(i+2)%3];
+                count+=dp[(i+1)%3];
+                dp[i%3]=count;
+            }
+        }
+        return dp[0];
+
     }
 };
