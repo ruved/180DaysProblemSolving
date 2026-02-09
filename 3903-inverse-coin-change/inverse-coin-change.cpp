@@ -1,39 +1,28 @@
 class Solution {
 public:
-    vector<int> findCoins(vector<int>& numWays) {
-       int n = numWays.size();          // sums = 1..n
-        vector<long long> dp(n + 1, 0);
-        dp[0] = 1;
+std::vector<int> findCoins(const std::vector<int>& numWays) {
+    int n = static_cast<int>(numWays.size());
+    std::vector<long long> myWays(n + 1, 0);
+    myWays[0] = 1;
 
-        vector<int> coins;
+    std::vector<int> res;
 
-        for (int s = 1; s <= n; s++) {
-            long long target = numWays[s - 1];
+    for (int i = 1; i <= n; ++i) {
+        // If `myWays[x] == numWays[x]`, move on.
+        if (myWays[i] == numWays[i - 1]) continue;
 
-            // already too many ways → impossible
-            if (dp[s] > target) {
-                return {};
+        // If `myWays[x] + 1 == numWays[x]` → add that value as a coin in our basket and update `myWays`, so `myWays[x...n]` accounts for ways with the new coin.
+        if (numWays[i - 1] - myWays[i] == 1) {
+            res.push_back(i);
+            for (int j = i; j <= n; ++j) {
+                myWays[j] += myWays[j - i];
             }
 
-            // missing ways → must add coin s
-            if (dp[s] < target) {
-                coins.push_back(s);
-
-                for (int j = s; j <= n; j++) {
-                    dp[j] += dp[j - s];
-
-                    if (dp[j] > numWays[j - 1]) {
-                        return {};
-                    }
-                }
-            }
-
-            // 🔥 CRITICAL CHECK (the missing one)
-            if (dp[s] != target) {
-                return {};
-            }
+        // If `myWays[x] + 1 < numWays[x]` → no solution. (*see below for why)
+        } else {
+            return {};
         }
-
-        return coins;
     }
+    return res;
+}
 };
