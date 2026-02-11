@@ -1,20 +1,27 @@
-constexpr int N=1e5+1;
-short freq[N]={0};
+
 class Solution {
 public:
-    static int longestBalanced(vector<int>& nums) {
-        const int n=nums.size();
-        int len=0;
-        for(int l=0; l<n; l++){
-            int cnt[2]={0};
-            for(int r=l; r<n; r++){
-                const int x=nums[r];
-                if (++freq[x]==1) cnt[x&1]++;
-                if (cnt[0]==cnt[1])
-                    len=max(len, r-l+1);
+   inline static uint32_t seen[100001] = {};
+    inline static uint32_t leet = 0;
+    int longestBalanced(vector<int>& nums) {
+        leet++;
+        int n = nums.size();
+        int res = 0;
+
+        for (int i = 0; i < n && n - i > res; i++) {
+            int A[2] = {0, 0};
+            uint32_t marker = (leet << 16) | (uint32_t)(i + 1);
+            for (int j = i; j < n; j++) {
+                int val = nums[j];
+                if (seen[val] != marker) {
+                    seen[val] = marker;
+                    A[val & 1]++;
+                }
+                if (A[0] == A[1])
+                    res = max(res, j - i + 1);
             }
-            for(int i=l; i<n; i++) freq[nums[i]]=0;
         }
-        return len;
+
+        return res;
     }
 };
