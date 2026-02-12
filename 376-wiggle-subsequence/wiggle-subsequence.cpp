@@ -13,9 +13,27 @@ int help(vector<int>& nums,int prev,bool pos,vector<vector<int>>&dp){
 
 }
     int wiggleMaxLength(vector<int>& nums) {
-        int n=nums.size();
-        vector<vector<int>>dp(n,vector<int>(2,-1));
-        int l=max(help(nums,n-1,true,dp),help(nums,n-1,false,dp));
-        return l+1;
+          int n = nums.size();
+        if(n < 2) return n;
+
+        vector<int> up(n, 1), down(n, 1);
+
+        for(int i = 1; i < n; i++) {
+            if(nums[i] > nums[i-1]) {
+                up[i] = down[i-1] + 1;
+                down[i] = down[i-1];   // carry forward
+            }
+            else if(nums[i] < nums[i-1]) {
+                down[i] = up[i-1] + 1;
+                up[i] = up[i-1];       // carry forward
+            }
+            else {
+                up[i] = up[i-1];
+                down[i] = down[i-1];
+            }
+        }
+
+        return max(up[n-1], down[n-1]);
+    
     }
 };
