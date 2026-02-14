@@ -1,36 +1,35 @@
 class Solution {
 public:
-int help(vector<int>& arr, int &difference,int prev,int i,vector<vector<int>>&dp){
-        if(i>=arr.size()) return 0;
-        
-        if(dp[prev+1][i]!=INT_MIN) 
-            return dp[prev+1][i];
-        int take=0,notake=0;
-        notake=help(arr,difference,prev,i+1,dp);
-        if(prev==-1||((arr[i]-arr[prev])==difference)){
-            take=1+help(arr,difference,i,i+1,dp);
-        }
-         int res=dp[prev+1][i]=max(take,notake);
-         cout<<prev<<" "<<i<<" "<<res<<":";
-         return dp[prev+1][i];
+int help(vector<int>& arr, int &diff,int prev,vector<int>&dp){
+    
+    if(dp[prev] != -1) return dp[prev];
+    int ans=1;
+    for(int j=prev-1;j>=0;--j){
+        if(arr[prev]-arr[j]==diff)
+        ans=max(ans,1+help(arr,diff,j,dp));
+    }
+    return dp[prev]=ans;
+
 }
     int longestSubsequence(vector<int>& arr, int difference) {
-         int n = arr.size();
-        unordered_map<int, int> dp; 
+        // int n = arr.size();
+        // vector<int> dp(n, -1);
+        // int ans = 1;
+
+        // for(int i = 0; i < n; i++) {
+        //     ans = max(ans, help(arr, difference, i, dp));
+        // }
+
+        // return ans;
+        unordered_map<int,int> dp;
+        int ans = 1;
         
-        int ans = 1; 
-        
-        for (int i = 0; i < n; i++) {
-            int num = arr[i];
-            if (dp.find(num - difference) != dp.end()) {
-                dp[num] = dp[num - difference] + 1;
-            } else {
-                dp[num] = 1;
-            }
-            
-            ans = max(ans, dp[num]);
+        for(int x : arr) {
+            dp[x] = dp[x - difference] + 1;
+            ans = max(ans, dp[x]);
         }
         
         return ans;
+        
     }
 };
