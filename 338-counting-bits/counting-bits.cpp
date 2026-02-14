@@ -1,26 +1,19 @@
 class Solution {
 public:
     vector<int> countBits(int n) {
-      
-        vector<int>dp(n+1);
-       dp[0]=0;
-       if(n==0) return dp;
-       dp[1]=1;
-       if(n==1) return dp;
-        int count=1;
-        int i=2;
-        while(i<=n){
-            dp[i]=1;
-            if(i==n) break;
-            int st=pow(2,count);
-            int en=pow(2,count+1);
-            while(i<=n&&i<en){
-                dp[i]=dp[st]+dp[i-st];
-                i++;
+         vector<int> dp(n+1, 0);
+        
+        int power = 1;
+        
+        while(power <= n) {
+            
+            for(int i = 0; i < power && power + i <= n; i++) {
+                dp[power + i] = 1 + dp[i];
             }
             
-            count++;
+            power <<= 1;
         }
+        
         return dp;
     }
 };
