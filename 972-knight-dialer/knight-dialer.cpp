@@ -16,12 +16,27 @@ int help(int n,int d,vector<vector<int>>&dp){
 }
     int knightDialer(int n) {
         long sum=0;
-        vector<vector<int>>dp(n,vector<int>(10,-1));
-        for(int i=0;i<=9;++i){
-            sum+=help(n-1,i,dp);
-            sum%=mod;
+        vector<vector<int>>dp(n+1,vector<int>(10,0));
+        // for(int i=0;i<=9;++i){
+        //     sum+=help(n-1,i,dp);
+        //     sum%=mod;
+        // }
+        
+        // return sum%mod;
+        for(int i=0;i<=9;++i) dp[1][i]=1;
+        
+        for(int i = 2; i <= n; i++) {
+            for(int d = 0; d < 10; d++) {
+                for(int next : path[d]) {
+                    dp[i][next] = (dp[i][next] + dp[i-1][d]) % mod;
+                }
+            }
         }
         
-        return sum%mod;
+        long long ans = 0;
+        for(int d = 0; d < 10; d++)
+            ans = (ans + dp[n][d]) % mod;
+        
+        return ans;
     }
 };
