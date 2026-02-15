@@ -1,56 +1,29 @@
 class Solution {
 public:
-    
-    int MOD = 1e9 + 7;
-    
-    int f(int i, string &s, vector<int> &dp)
-        {
-            if(i >= s.size())
-                return 1;
-        
-            else if(s[i] == '0')
-                return 0;
-        
-            if(dp[i] != -1)
-                return dp[i];
-       
-            long long oneCharChoice = f(i + 1, s, dp);
-            if(s[i] == '*')
-                oneCharChoice = (9 * oneCharChoice) % MOD;
-        
-            long long twoCharChoice1 = 0;
-            long long twoCharChoice2 = 0;
-        
-            if(i + 1 < s.size())
-            {
-                if(s[i] == '1' || s[i] == '*')
-                {
-                    twoCharChoice1 = f(i + 2, s, dp);
-                    
-                    if(s[i + 1] == '*')
-                        twoCharChoice1 = (9 * twoCharChoice1) % MOD;
-                }
-                if(s[i] == '2' || s[i] == '*')
-                {
-                    if (s[i + 1] == '*')
-                    {
-                        twoCharChoice2 = f(i + 2, s, dp);
-                        twoCharChoice2 = (6 * twoCharChoice2) % MOD;
-                    }
-                    else if (s[i + 1] - '0' <= 6)
-                    {
-                            twoCharChoice2 = f(i + 2, s, dp);
-                    }
-                }
-            }
-            
-            return dp[i] = ((oneCharChoice + twoCharChoice1)%MOD + twoCharChoice2) % MOD;
-        }
+int mod=1e9+7;
+    long int help(string &s,int i,vector<int>&dp){
+        if(i==s.length()) return 1;
 
-        int numDecodings(string s) {
-            
-            int n = s.size();
-            vector<int> dp(n + 1, -1);
-            return f(0, s, dp);
+        if(dp[i]!=-1) return dp[i];
+        if(s[i]=='0') return 0;
+        long long unsigned ans=0;
+        if((i+1<s.length())&&(s[i]=='*'||s[i]=='1'||s[i]=='2')){
+            if(s[i]=='*'||s[i]=='1')
+                ans+=(s[i+1]=='*'?9*help(s,i+2,dp):help(s,i+2,dp));
+            ans%=mod;
+            if((s[i]=='*'||s[i]=='2')&&(s[i+1]<='6'||s[i+1]=='*'))
+                ans+=(s[i+1]=='*'?6*help(s,i+2,dp):help(s,i+2,dp));
+            ans%=mod;
         }
+        if(s[i]=='*')
+            ans+=(9*help(s,i+1,dp))%mod;
+        else
+            ans+=help(s,i+1,dp);
+       return dp[i]=ans%mod;
+    }
+
+    int numDecodings(string s) {
+        vector<int>dp(s.length(),-1);
+        return help(s,0,dp)%mod;
+    }
 };
