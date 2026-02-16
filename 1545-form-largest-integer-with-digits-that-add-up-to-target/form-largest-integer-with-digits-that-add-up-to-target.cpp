@@ -9,19 +9,13 @@ string help(vector<int>& cost, int target,vector<string>&dp){
         string ans = "#";
 
         for (int i = 0; i < 9; ++i) {
-
             if (target >= cost[i]) {
-
                 string next = help(cost, target - cost[i], dp);
-
                 if (next != "#") {
-
                     string temp = char('1' + i) + next;
-
                     if (ans == "#" ||
                         temp.length() > ans.length() ||
                         (temp.length() == ans.length() && temp > ans)) {
-
                         ans = temp;
                     }
                 }
