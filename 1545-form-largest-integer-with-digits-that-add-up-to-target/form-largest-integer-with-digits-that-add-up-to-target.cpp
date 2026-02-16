@@ -1,35 +1,38 @@
-class Solution
-{
+class Solution {
 public:
-    string solve(int tgt, vector<int> &c, vector<string> &dp)
-    {
-        if (tgt == 0)
-        {
-            return "";
-        }
-        if (dp[tgt] != "#")
-        {
-            return dp[tgt];
-        }
-        string ans = "0";
-        for (int i = 1; i <= 9; i++)
-        {
-            if (tgt >= c[i-1])
-            {
-                string curr = solve(tgt - c[i - 1], c, dp);
-                if(curr=="0")continue;
-                curr = to_string(i)+curr;
-                if(ans.length()>curr.length())continue;
-                if((ans=="0")||(curr.length()>ans.length())||(curr.length()==ans.length()&&curr.compare(ans)>0)){
-                    ans =curr;
+string help(vector<int>& cost, int target,vector<string>&dp){
+    if (target == 0) return "";
+        if (target < 0) return "#";
+
+        if (dp[target] != "-1") return dp[target];
+
+        string ans = "#";
+
+        for (int i = 0; i < 9; ++i) {
+
+            if (target >= cost[i]) {
+
+                string next = help(cost, target - cost[i], dp);
+
+                if (next != "#") {
+
+                    string temp = char('1' + i) + next;
+
+                    if (ans == "#" ||
+                        temp.length() > ans.length() ||
+                        (temp.length() == ans.length() && temp > ans)) {
+
+                        ans = temp;
+                    }
                 }
             }
         }
-        return dp[tgt] = ans;
-    }
-    string largestNumber(vector<int> &cost, int target)
-    {
-        vector<string> dp(target + 1, "#");
-        return solve(target, cost, dp);
+
+        return dp[target] = ans;
+}
+    string largestNumber(vector<int>& cost, int target) {
+        vector<string>dp(target+1,"-1");
+        string ans= help(cost,target,dp);
+        return (ans=="#")?"0":ans;
     }
 };
