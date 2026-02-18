@@ -1,44 +1,25 @@
 class Solution {
 public:
-    vector<string> ans;
-
-    void solve(int i, string &sentence, string &givenString, unordered_map<string, bool> &doesExist) {
-        if (i >= givenString.size()) {
-            ans.push_back(sentence);
-            return;
-        }
-
-        for (int j = i + 1; j <= i + 10  &&  j <= givenString.size(); j++) {
-            string word = givenString.substr(i, j - i);
-            if (doesExist.find(word) != doesExist.end()) {
-                if (sentence.size() == 0) {
-                    sentence = word;
-                } else {
-                    sentence += " " + word;
-                }
-                solve(j, sentence, givenString, doesExist);
-                int x = 0;
-                while (x < word.size()) {
-                    x++;
-                    sentence.pop_back();
-                }
-
-                if (sentence.size() > 0) {
-                    sentence.pop_back();
-                }
-            }
+void help(string &s,int i,unordered_set<string>&hset,string temp,vector<string>&res){
+    if(i>=s.length()){
+        res.push_back(temp);
+        return ;
+    }
+    string tmp="";
+    for(int j=i;j<s.length();++j){
+        tmp.push_back(s[j]);
+        if(hset.find(tmp)!=hset.end()){
+            help(s,j+1,hset,(temp.empty()?tmp:temp + " " + tmp),res);
         }
     }
-
+}
     vector<string> wordBreak(string s, vector<string>& wordDict) {
-        string sentence = "";
-        unordered_map<string, bool> doesExist;
-        for (auto x: wordDict) {
-            doesExist[x] = true;
-        }
-
-        ans.clear();
-        solve(0, sentence, s, doesExist);
-        return ans;
+        unordered_set<string>hset;
+        for(int i=0;i<wordDict.size();++i)
+            hset.insert(wordDict[i]);
+        vector<string>res;
+        string temp="";    
+         help(s,0,hset,temp,res);
+         return res;
     }
 };
