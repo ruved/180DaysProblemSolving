@@ -32,7 +32,7 @@ int help(string &s, string &t,int si,int ti,vector<vector<int>>&dp){
         // }
         // return dp[n][m];
 
-        vector<unsigned long long> dp(m+1, 0);
+        vector<unsigned int> dp(m+1, 0);
             dp[0] = 1;
 
             for(int i = 1; i <= n; i++) {
