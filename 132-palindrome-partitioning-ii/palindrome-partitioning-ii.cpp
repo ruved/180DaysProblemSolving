@@ -1,28 +1,38 @@
 class Solution {
 public:
-bool pal(string &s,int i,int j){
-    // int i=0,j=s.length()-1;
-    while(i<j){
-        if(s[i]!=s[j]) return false;
-        i++,j--;
-    }
-    return true;
-}
-int help(string &s,int i,vector<int>&dp){
-    if(i<0) return 0;
-    if(dp[i]!=-1) return dp[i];
-    string sub="";
-    int ans=INT_MAX;
-    for(int j=i;j>=0;--j){
-        if(pal(s,j,i)){
-            ans=min(ans,1+help(s,j-1,dp));
+int help(int i, string &s, vector<vector<bool>>& pal,
+         vector<int>& dp) {
+
+    if(i == s.size())
+        return -1;   // no cut needed beyond end
+
+    if(dp[i] != -1)
+        return dp[i];
+
+    int ans = INT_MAX;
+
+    for(int j = i; j < s.size(); j++) {
+
+        if(pal[i][j]) {
+
+            ans = min(ans, 1 + help(j+1, s, pal, dp));
         }
     }
-    return dp[i]=ans;
+
+    return dp[i] = ans;
 }
     int minCut(string s) {
         int n=s.length();
+        vector<vector<bool>>pal(n,vector<bool>(n,false));
+        // Precompute palindrome
+        for(int i = n-1; i >= 0; i--) {
+            for(int j = i; j < n; j++) {
+                if(s[i] == s[j] &&
+                (j - i <= 2 || pal[i+1][j-1]))
+                    pal[i][j] = true;
+            }
+        }
         vector<int>dp(n,-1);
-        return help(s,n-1,dp)-1;
+        return help(0,s,pal,dp);
     }
 };
