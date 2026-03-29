@@ -12,8 +12,12 @@ int dp[51][51][51][51]; // 4D - dp
         {
             return grid[r1][c1];    
         }
+        if(r2 == grid.size()-1 && c2 == grid[0].size()-1)
+        {
+            return grid[r2][c2];    
+        }
         
-        if(dp[r1][c1][r2][c2]!=0)
+        if(dp[r1][c1][r2][c2]!=-1)
             return dp[r1][c1][r2][c2];
         
         int cherries = 0;
@@ -35,7 +39,7 @@ int dp[51][51][51][51]; // 4D - dp
     
     int cherryPickup(vector<vector<int>>& grid) {
         
-        memset(dp,0,sizeof(dp));
+        memset(dp,-1,sizeof(dp));
         int ans = cp(0,0,0,0,grid);
         return (ans < 0) ? 0 : ans;
     }
