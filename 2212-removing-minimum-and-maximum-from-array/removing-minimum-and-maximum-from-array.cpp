@@ -5,17 +5,12 @@ public:
         int maxi=max_element(nums.begin(),nums.end())-nums.begin();
         int st=min(mini,maxi);
         int en=max(mini,maxi);
-        int len=nums.size();
-        int ans=0;
-        if(st>=len-1-en){
-            ans+=len-en;
-            ans+=min(en-st,st+1);
-        }
-        else{
-            ans+=st+1;
-            ans+=min(en-st,len-en);
-        }
-        return ans;
+        int n=nums.size();
+        int fromFront = en + 1;
+        int fromBack = n - st;
+        int bothSides = (st + 1) + (n - en);
+
+        return min({fromFront, fromBack, bothSides});
 
     }
 };
