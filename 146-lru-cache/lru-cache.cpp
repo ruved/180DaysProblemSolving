@@ -1,35 +1,62 @@
-class LRUCache
-{
-    public:
-        list<pair<int,int>> l;
-        unordered_map<int,list<pair<int, int>>::iterator> m;
-        int size;
-        LRUCache(int capacity)
-        {
-            size=capacity;
-        }
-        int get(int key)
-        {
-            if(m.find(key)==m.end())
-                return -1;
-            l.splice(l.begin(),l,m[key]);
-            return m[key]->second;
-        }
-        void put(int key, int value)
-        {
-            if(m.find(key)!=m.end())
-            {
-                l.splice(l.begin(),l,m[key]);
-                m[key]->second=value;
-                return;
+class LRUCache {
+public:
+  // key -> {value, latest timestamp}
+    unordered_map<int, pair<int, int>> mp;
+
+    // {key, timestamp}
+    queue<pair<int, int>> q;
+
+    int timer = 0;
+    int cap;
+
+    LRUCache(int capacity) {
+        cap = capacity;
+    }
+
+    int get(int key) {
+        if (mp.find(key) == mp.end())
+            return -1;
+
+        timer++;
+
+        // Update latest timestamp
+        mp[key].second = timer;
+
+        // Record this latest access
+        q.push({key, timer});
+
+        return mp[key].first;
+    }
+
+    void put(int key, int value) {
+        timer++;
+
+        // Update/insert key
+        mp[key] = {value, timer};
+
+        // Record latest access
+        q.push({key, timer});
+
+        // Cache has exceeded capacity
+        while (mp.size() > cap) {
+
+            auto [oldKey, oldTime] = q.front();
+            q.pop();
+
+            // Check whether this is still the latest
+            // access of oldKey
+            if (mp.find(oldKey) != mp.end() &&
+                mp[oldKey].second == oldTime) {
+
+                mp.erase(oldKey);
             }
-            if(l.size()==size)
-            {
-                auto d_key=l.back().first;
-                l.pop_back();
-                m.erase(d_key);
-            }
-            l.push_front({key,value});
-            m[key]=l.begin();
         }
+    }
 };
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
